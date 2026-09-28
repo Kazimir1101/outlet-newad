@@ -563,6 +563,165 @@ $(document).ready(function(){
         group.find(".form-error").first().text("");
     });
 
+
+    // =========================
+// CAPITALIZE FIRST LETTER + SPACE CONTROL
+// =========================
+// Qaydalar:
+// 1) İlk hərf böyük olur
+// 2) Başlanğıcda boşluq qadağandır
+// 3) Ardıcıl 2+ boşluq qadağandır (hər yerdə)
+// 4) Sonda yalnız 1 boşluq ola bilər
+
+const textInputsSelector =
+    'input[type="text"], input[type="search"], textarea';
+
+const excludedIds = ["oldPrice", "newPrice", "phone", "quantity"];
+
+function isExcluded($el) {
+    const id = $el.attr("id");
+    return id && excludedIds.indexOf(id) !== -1;
+}
+
+function capitalizeFirstLetter(str) {
+    if (!str || str.length === 0) return str;
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// Yazarkən təmizləmə funksiyası
+function sanitizeValue(raw) {
+    let value = raw;
+
+    // 1) Bütün \r\n → boşluq (textarea üçün)
+    value = value.replace(/[\r\n]+/g, " ");
+
+    // 2) Ardıcıl 2+ boşluğu tək boşluğa endiririk
+    value = value.replace(/ {2,}/g, " ");
+
+    // 3) Başlanğıcdakı bütün boşluqları silirik
+    value = value.replace(/^ +/, "");
+
+    // 4) İlk hərfi böyük edirik
+    value = capitalizeFirstLetter(value);
+
+    return value;
+}
+
+// Input hadisəsi — real vaxtda
+$(document).on("input", textInputsSelector, function () {
+    const $el = $(this);
+    if (isExcluded($el)) return;
+
+    const el = $el[0];
+    const oldValue = $el.val();
+
+    // Boşluq yazmağa icazə yoxdursa (başlanğıc və ya ardıcıl 2-ci boşluq) → sadəcə blok edirik
+    const newValue = sanitizeValue(oldValue);
+
+    if (oldValue !== newValue) {
+        const start = el.selectionStart;
+        const end = el.selectionEnd;
+
+        // Kursorun solunda olan boşluq sayına görə düzəliş edirik
+        const beforeCursor = oldValue.substring(0, start);
+        const cleanedBefore = sanitizeValue(beforeCursor);
+
+        const diff = cleanedBefore.length - beforeCursor.length;
+
+        $el.val(newValue);
+
+        const newPos = Math.max(0, start + diff);
+        try {
+            el.setSelectionRange(newPos, newPos);
+        } catch (err) {
+            // bəzi input tiplərində setSelectionRange dəstəklənmir
+        }
+    }
+});
+
+// Ayrıca — boşluq düyməsinin başlanğıcda basılmasını tam blok edirik
+$(document).on("keydown", textInputsSelector, function (e) {
+    const $el = $(this);
+    if (isExcluded($el)) return;
+
+    if (e.key === " " || e.key === "Spacebar") {
+        const el = this;
+        const start = el.selectionStart;
+        const end = el.selectionEnd;
+        const value = $el.val();
+
+        const before = value.substring(0, start);
+        const after = value.substring(end);
+
+        // 1) Başlanğıcdadırsa → blok
+        if (start === 0) {
+            e.preventDefault();
+            return;
+        }
+
+        // 2) Kursorun solundakı simvol boşluqdursa → blok (ardıcıl 2-ci boşluq)
+        if (before.slice(-1) === " ") {
+            e.preventDefault();
+            return;
+        }
+
+        // 3) Kursorun sağındakı simvol boşluqdursa → blok
+        if (after.charAt(0) === " ") {
+            e.preventDefault();
+            return;
+        }
+    }
+});
+
+// Blur — sonda artıq boşluqları silirik (tək boşluq qalır və ya tamamilə silinir)
+$(document).on("blur", textInputsSelector, function () {
+    const $el = $(this);
+    if (isExcluded($el)) return;
+
+    let value = $el.val();
+
+    // Başlanğıc boşluqları sil
+    value = value.replace(/^ +/, "");
+
+    // Sonda yalnız 1 boşluq qalsın
+    value = value.replace(/ +$/, " ");
+
+    // Əgər nəticə yalnız boşluqdursa → tamamilə boş
+    if (value === " ") value = "";
+
+    value = capitalizeFirstLetter(value);
+
+    $el.val(value);
+});
+
+// Paste — yapışdırılanda da təmizləyirik
+$(document).on("paste", textInputsSelector, function (e) {
+    const $el = $(this);
+    if (isExcluded($el)) return;
+
+    e.preventDefault();
+
+    const pasted = (e.originalEvent || e).clipboardData.getData("text") || "";
+    const el = this;
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    const current = $el.val();
+
+    let combined =
+        current.substring(0, start) + pasted + current.substring(end);
+
+    combined = sanitizeValue(combined);
+
+    $el.val(combined);
+
+    const newPos = Math.min(combined.length, start + pasted.length);
+    try {
+        el.setSelectionRange(newPos, newPos);
+    } catch (err) {}
+});
+
+
+
     // =========================
     // BACK TO MAIN
     // =========================
