@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outlet</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="main-container">
+    <div class="create-ad-page">
+        <div class="create-ad-container">
+
+            <form class="create-ad-form" id="createAdForm">
+
+                <!-- HEADING -->
+                <div class="form-heading">
+                    <a href="/home/index.html">
+                        <i class="fa-solid fa-arrow-left-long"></i>
+                    </a>
+                    <h3><span class="orange">O</span>utlet</h3>
+                    <div class="no-visible">x</div>
+                </div>
+
+                <!-- KATEQORİYA -->
+                <div class="form-group">
+                    <div class="custom-category-select">
+                        <button type="button" class="category-select-button">
+                            <i class="fa-solid fa-list-ul category-select-icon" style="padding-right:3px;"></i>
+                            <span class="category-selected-text placeholder">Kateqoriya seçin</span>
+                            <i class="fa-solid fa-chevron-down category-select-arrow" style="padding-right:3px;"></i>
+                        </button>
+
+                        <div class="category-options">
+                            <div class="category-option" data-value="şirniyyat">Şirniyyat</div>
+                            <div class="category-option" data-value="geyim">Geyim</div>
+                            <div class="category-option" data-value="ayaqqabı">Ayaqqabı</div>
+                            <div class="category-option" data-value="güllər">Güllər</div>
+                            <div class="category-option" data-value="elektronika">Elektronika</div>
+                            <div class="category-option" data-value="digər">Digər</div>
+                        </div>
+                    </div>
+
+                    <!-- real value backend üçün -->
+                    <input type="hidden" id="category" name="category">
+                    <small class="form-error"></small>
+                </div>
+
+                <!-- DÜKANIN ADI -->
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-shop"></i>
+                        <input type="text" id="shopName" name="shopName" maxlength="20" placeholder="Dükanın adı" autocomplete="off">
+                    </div>
+                    <small class="form-error"></small>
+                </div>
+
+                <!-- MƏHSUL + MİQDAR -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-tag"></i>
+                            <input type="text" id="productName" name="productName" maxlength="30" placeholder="Məhsulun adı" autocomplete="off">
+                        </div>
+                        <small class="form-error"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-box"></i>
+                            <input type="number" id="quantity" name="quantity" min="1" max="999" step="1" inputmode="numeric" placeholder="Miqdar">
+                        </div>
+                        <small class="form-error"></small>
+                    </div>
+                </div>
+
+                <!-- ƏTRAFLI MƏLUMAT -->
+                <div class="form-group">
+                    <div class="input-wrapper textarea-wrapper">
+                        <i class="fa-solid fa-file-lines"></i>
+                        <textarea id="productFullInfo" name="productFullInfo" placeholder="Məhsul haqqında ətraflı məlumat" maxlength="150" autocomplete="off"></textarea>
+                    </div>
+                    <small class="form-error"></small>
+                </div>
+
+                <!-- QİYMƏT + MÜDDƏT -->
+                <div class="form-group price-duration-group">
+                    <div class="price-duration-row">
+
+                        <div class="compact-price-field">
+                            <div class="compact-price-input">
+                                <input type="text" id="oldPrice" name="oldPrice" inputmode="decimal" maxlength="8" placeholder="Köhnə qiymət" autocomplete="off">
+                                <span>₼</span>
+                            </div>
+                        </div>
+
+                        <div class="compact-price-field">
+                            <div class="compact-price-input discount-price">
+                                <input type="text" id="newPrice" name="newPrice" inputmode="decimal" maxlength="8" placeholder="Yeni qiymət" autocomplete="off">
+                                <span>₼</span>
+                            </div>
+                        </div>
+
+                        <div class="compact-duration-field">
+                            <div class="custom-duration-select">
+                                <button type="button" class="duration-select-button">
+                                    <i class="fa-solid fa-clock duration-select-icon"></i>
+                                    <span class="duration-selected-text placeholder">Elan müddəti</span>
+                                    <i class="fa-solid fa-chevron-down duration-select-arrow"></i>
+                                </button>
+
+                                <div class="duration-options">
+                                    <div class="duration-option" data-value="1">1 gün</div>
+                                    <div class="duration-option" data-value="2">2 gün</div>
+                                    <div class="duration-option" data-value="3">3 gün</div>
+                                    <div class="duration-option" data-value="4">4 gün</div>
+                                    <div class="duration-option" data-value="5">5 gün</div>
+                                    <div class="duration-option" data-value="6">6 gün</div>
+                                    <div class="duration-option" data-value="7">7 gün</div>
+                                    <div class="duration-option" data-value="10">10 gün</div>
+                                    <div class="duration-option" data-value="14">14 gün</div>
+                                    <div class="duration-option" data-value="30">30 gün</div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="deleteAfter" name="deleteAfter">
+                        </div>
+                    </div>
+
+                    <small class="form-error"></small>
+                </div>
+
+                <!-- ƏLAQƏ + ŞƏHƏR -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-phone"></i>
+                            <input type="tel" id="phone" name="phone" placeholder="Əlaqə nömrəsi" autocomplete="tel">
+                        </div>
+                        <small class="form-error"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="custom-city-select">
+                            <button type="button" class="city-select-button">
+                                <i class="fa-solid fa-location-dot city-select-icon"></i>
+                                <span class="city-selected-text placeholder">Şəhər</span>
+                                <i class="fa-solid fa-chevron-down city-select-arrow" style="padding-right:2px;"></i>
+                            </button>
+
+                            <div class="city-options">
+                                <div class="city-option" data-value="Bakı">Bakı</div>
+                                <div class="city-option" data-value="Sumqayıt">Sumqayıt</div>
+                                <div class="city-option" data-value="Quba">Quba</div>
+                                <div class="city-option" data-value="Qusar">Qusar</div>
+                                <div class="city-option" data-value="Xaçmaz">Xaçmaz</div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="city" name="city">
+                        <small class="form-error"></small>
+                    </div>
+                </div>
+
+                <!-- ÜNVAN -->
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-map-pin"></i>
+                        <input type="text" id="address" name="address" maxlength="30" placeholder="Ünvan" autocomplete="street-address">
+                    </div>
+                    <small class="form-error"></small>
+                </div>
+
+                <!-- ŞƏKİL -->
+                <div class="form-group">
+                    <div class="image-upload">
+                        <input type="file" id="productImages" name="productImages" accept="image/*" multiple>
+                        <label for="productImages" class="image-upload-label">
+                            <div class="upload-icon">
+                                <i class="fa-regular fa-image"></i>
+                            </div>
+                            <div class="upload-text">
+                                <strong>Məhsulun şəkillərini seçin</strong>
+                                <span>Maksimum 5 şəkil əlavə edin</span>
+                            </div>
+                            <i class="fa-solid fa-plus upload-plus"></i>
+                        </label>
+                    </div>
+
+                    <div class="image-preview"></div>
+                    <small class="form-error"></small>
+                </div>
+
+                <!-- SUBMIT -->
+                <div class="footer-btns-block">
+                    <button type="button" class="create-ad-submit back-to-main-button">
+                        <span>
+                            <i class="fa-solid fa-arrow-left"></i>
+                            Geri
+                        </span>
+                    </button>
+
+                    <button type="submit" class="create-ad-submit submit-button">
+                        <span>
+                            Əlavə et
+                            <i class="fa-solid fa-arrow-right arrow-right-icon"></i>
+                        </span>
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- JAVASCRIPT -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="/app.js"></script>
+
+</body>
+</html>
